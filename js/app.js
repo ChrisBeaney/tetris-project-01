@@ -33,6 +33,16 @@ document.addEventListener('DOMContentLoaded',() => {
   const shapeS = [1, 2, width, 1 + width]
   const shapeZ = [0, 1, 1 + width, 2 + width]
 
+  const shapesArray = [shapeO, shapeI, shapeT, shapeL, shapeJ, shapeS, shapeZ]
+  const randomShapeIndex = Math.floor(Math.random() * shapesArray.length)
+
+  const randomShape = shapesArray[randomShapeIndex]
+  console.log(randomShape)
+  // randomShape.forEach(index => {
+  //   squares
+  // })
+
+
   const currentBlock = squares[currentIndex]
   currentBlock.classList.add('block')
 
