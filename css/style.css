@@ -1,3 +1,29 @@
 * {
+  box-sizing: border-box;
   background-color: yellow;
+}
+
+body {
+  margin: 0;
+  display: flex;
+}
+
+.game-grid {
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.square {
+  border: 1px solid green;
+  width: 10%;
+  /* TODO: Can I fix a height to scale with width? */
+  height: 25px;
+  background-color: white;
+}
+
+.block {
+  background-color: black;
 }
