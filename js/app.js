@@ -4,7 +4,7 @@ const width = 10
 const height = 20
 // let currentIndex = 0
 let currentIndex = Math.floor(Math.random() * 3 + 3)
-let randomIndex = Math.floor(Math.random() * 3 + 3)
+// let randomIndex = Math.floor(Math.random() * 3 + 3)
 let timerId = null
 
 
@@ -23,11 +23,26 @@ document.addEventListener('DOMContentLoaded',() => {
     squares.push(square)
   }
 
-
   // 2. Create Blocks
   // Start with a single block, then 'O','I', then 'L','J','T', finally 'S', 'Z'
-  const nextBlock = squares[currentIndex]
-  nextBlock.classList.add('block')
+  const shapeO = [0, 1, width, 1 + width]
+  const shapeI = [0, 1, 2, 3]
+  const shapeT = [0, 1, 2, 1 + width]
+  const shapeL = [0, 1, 2, width]
+  const shapeJ = [0, 1, 2, 2 + width]
+  const shapeS = [1, 2, width, 1 + width]
+  const shapeZ = [0, 1, 1 + width, 2 + width]
+
+  const currentBlock = squares[currentIndex]
+  currentBlock.classList.add('block')
+
+  function fallingBlock () {
+    if(currentIndex + width < width * height) {
+      currentBlock[currentIndex] = currentBlock[currentIndex + width]
+      console.log(currentBlock[currentIndex])
+    }
+  }
+  timerId = setInterval(fallingBlock(), 1000)
 
 
   // 3. Move Shapes (left/right movement 'A''D', then 'S')
@@ -39,9 +54,6 @@ document.addEventListener('DOMContentLoaded',() => {
       case 37:
         if(currentIndex % width !== 0) currentIndex -= 1
         break
-      // case 38:
-      //   if(currentIndex - width >= 0) currentIndex -= width
-      //   break
       case 39:
         if(currentIndex % width < width - 1) currentIndex += 1
         break
@@ -51,19 +63,14 @@ document.addEventListener('DOMContentLoaded',() => {
     }
 
     squares[currentIndex].classList.add('block')
+
   }
 
   document.addEventListener('keyup', moveBlock)
 
   // 4. Create falling blocks
   // Start with a single, falling block.
-  // function fallingBlock (block) {
-  //   if(currentIndex + width < width * height) {
-  //     currentIndex += width
-  //     return block[currentIndex]
-  //   }
-  // }
-  // timerId = setInterval(fallingBlock, 1000)
+
 
 
   // 5. Detect Sides
