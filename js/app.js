@@ -3,11 +3,9 @@ const totalBoxes = 200
 const width = 10
 const height = 20
 const squares = []
-const shapesArray = []
-// Create a random square for a block.
+const tetrominoArray = []
+let currentBlock = null
 let currentIndex = Math.floor(Math.random() * 4 + 3)
-console.log(currentIndex)
-// let randomIndex = Math.floor(Math.random() * 3 + 3)
 let timerId = null
 
 
@@ -29,8 +27,7 @@ document.addEventListener('DOMContentLoaded',() => {
   }
 
   // 2. Create Blocks
-  // Start with a single block, then 'O','I', then 'L','J','T', finally 'S', 'Z'
-  function createShapes () {
+  function createTetrominos () {
     const shapeO = [0, 1, width, 1 + width] // [0,1,10,11]
     const shapeI = [0, 1, 2, 3]
     const shapeT = [0, 1, 2, 1 + width] // [0,1,2,11]
@@ -39,27 +36,34 @@ document.addEventListener('DOMContentLoaded',() => {
     const shapeS = [1, 2, width, 1 + width] // [1,2,10,11]
     const shapeZ = [0, 1, 1 + width, 2 + width] // [0,1,11,12]
 
-    shapesArray.push(shapeO)
-    shapesArray.push(shapeI)
-    shapesArray.push(shapeT)
-    shapesArray.push(shapeL)
-    shapesArray.push(shapeJ)
-    shapesArray.push(shapeS)
-    shapesArray.push(shapeZ)
+    tetrominoArray.push(shapeO)
+    tetrominoArray.push(shapeI)
+    tetrominoArray.push(shapeT)
+    tetrominoArray.push(shapeL)
+    tetrominoArray.push(shapeJ)
+    tetrominoArray.push(shapeS)
+    tetrominoArray.push(shapeZ)
+    console.log(tetrominoArray)
   }
-  
-  const randomShapeIndex = Math.floor(Math.random() * shapesArray.length)
-
-  // Pick a random shape and add it to the grid.
-  const randomShape = shapesArray[randomShapeIndex]
-  console.log(randomShape) // returns an array of 4 numbers
-  randomShape.forEach(index => {
-    squares[index].classList.add('block')
-  })
 
 
-  // const currentBlock = squares[currentIndex]
-  // currentBlock.classList.add('block')
+  // 3. Pick a random tetromino.
+  function createBlock () {
+    const randomBlockIndex = Math.floor(Math.random() * tetrominoArray.length)
+    const block = tetrominoArray[randomBlockIndex]
+    currentBlock = block
+    console.log(currentBlock)
+  }
+
+  // 4. Add the random tetromino to the grid.
+  // TODO: make block appear in a random central block.
+  function addBlock () {
+    currentBlock.forEach(index => {
+      squares[index].classList.add('block')
+    })
+  }
+
+
 
   // function fallingBlock () {
   //   if(currentIndex + width < width * height) {
@@ -95,18 +99,26 @@ document.addEventListener('DOMContentLoaded',() => {
 
   // 4. Make blocks fall.
   function fall () {
-    squares.forEach((box, index) => {
-      if(box.classList.contains('block')) {
-        console.log('Square had a block.')
-        box.classList.remove('block')
-        console.log('Removed a block.')
-        squares[index + width].classList.add('block')
-        console.log('Added a block below.')
+    for(let i = squares.length-1; i >= 0; i--) {
+      if(squares[i].classList.contains('block')) {
+        console.log('Square has a block, removing block')
+        squares[i].classList.remove('block')
+        console.log('Adding block to square underneath.')
+        squares[i + 10].classList.add('block')
       }
-    })
+    }
+
+    // squares.forEach((box, index) => {
+    //   if(box.classList.contains('block')) {
+    //     console.log('Square had a block.')
+    //     box.classList.remove('block')
+    //     console.log('Removed a block.')
+    //     squares[index + width].classList.add('block')
+    //     console.log('Added a block below.')
+    //   }
+    // })
   }
 
-  fall()
 
   // 5. Detect Sides
 
@@ -140,11 +152,20 @@ document.addEventListener('DOMContentLoaded',() => {
 
 
 
+  // 12. Play function
+  function play () {
+
+  }
+
+  createGrid()
+  createTetrominos()
+  createBlock()
+  addBlock()
+  fall()
   // EXTRAS
 
   // a. Levels
   // b. clockwise & anti-clockwise rotation
   // c. 'localStorage' leaderboard
-
 
 })
