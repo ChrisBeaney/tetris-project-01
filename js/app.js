@@ -1,11 +1,10 @@
 // Variables
-const totalBoxes = 200
 const width = 10
 const height = 20
 const squares = []
 const tetrominoArray = []
 let currentBlock = null
-let currentIndex = Math.floor(Math.random() * 4 + 3)
+let currentIndex = null
 let timerId = null
 
 
@@ -17,7 +16,7 @@ document.addEventListener('DOMContentLoaded',() => {
   // 1. Create Grid
   // Create grid of 200 divs.
   function createGrid() {
-    for (let i=0; i<totalBoxes; i++) {
+    for (let i=0; i<width * height; i++) {
       const square = document.createElement('div')
       square.classList.add('square')
       square.innerText = i
@@ -43,7 +42,6 @@ document.addEventListener('DOMContentLoaded',() => {
     tetrominoArray.push(shapeJ)
     tetrominoArray.push(shapeS)
     tetrominoArray.push(shapeZ)
-    console.log(tetrominoArray)
   }
 
 
@@ -52,7 +50,6 @@ document.addEventListener('DOMContentLoaded',() => {
     const randomBlockIndex = Math.floor(Math.random() * tetrominoArray.length)
     const block = tetrominoArray[randomBlockIndex]
     currentBlock = block
-    console.log(currentBlock)
   }
 
   // 4. Add the random tetromino to the grid.
@@ -64,104 +61,87 @@ document.addEventListener('DOMContentLoaded',() => {
   }
 
 
-
-  // function fallingBlock () {
-  //   if(currentIndex + width < width * height) {
-  //     currentBlock[currentIndex] = currentBlock[currentIndex + width]
-  //     console.log(currentBlock[currentIndex])
-  //   }
-  // }
-  // timerId = setInterval(fallingBlock(), 1000)
-
-
-  // 3. Move Shapes (left/right movement 'A''D', then 'S')
-  // function moveBlock(e) {
-  //
-  //   squares[currentIndex].classList.remove('block')
-  //
-  //   switch(e.keyCode) {
-  //     case 37:
-  //       if(currentIndex % width !== 0) currentIndex -= 1
-  //       break
-  //     case 39:
-  //       if(currentIndex % width < width - 1) currentIndex += 1
-  //       break
-  //     case 40:
-  //       if(currentIndex + width < width * height) currentIndex += width
-  //       break
-  //   }
-  //
-  //   squares[currentIndex].classList.add('block')
-  //
-  // }
-  //
-  // document.addEventListener('keyup', moveBlock)
-
-  // 4. Make blocks fall.
+  // 5. Make blocks fall.
+  // TODO: lock blocks when they hit the bottom of the grid.
   function fall () {
     for(let i = squares.length-1; i >= 0; i--) {
       if(squares[i].classList.contains('block')) {
-        console.log('Square has a block, removing block')
         squares[i].classList.remove('block')
-        console.log('Adding block to square underneath.')
         squares[i + 10].classList.add('block')
       }
     }
-
-    // squares.forEach((box, index) => {
-    //   if(box.classList.contains('block')) {
-    //     console.log('Square had a block.')
-    //     box.classList.remove('block')
-    //     console.log('Removed a block.')
-    //     squares[index + width].classList.add('block')
-    //     console.log('Added a block below.')
-    //   }
-    // })
   }
 
 
-  // 5. Detect Sides
+  // 6. Move Shapes (left/right movement 'A''D', then 'S')
+  function moveBlock(e) {
+
+    currentBlock.classList.remove('block')
+
+    switch(e.keyCode) {
+      case 37:
+        if(currentIndex % width !== 0) currentIndex -= 1
+        break
+      case 39:
+        if(currentIndex % width < width - 1) currentIndex += 1
+        break
+      case 40:
+        if(currentIndex + width < width * height) currentIndex += width
+        break
+    }
+
+    currentBlock.classList.add('block')
+
+  }
+
+
+  // 7. Detect Sides
 
 
 
-  // 6a. Detect grid bottom
+  // 8a. Detect grid bottom
 
 
 
-  // 6b. Detect vertical collision with placed blocks
+  // 8b. Detect vertical collision with placed blocks
 
 
 
-  // 7. Create new blocks
+  // 9. Create new blocks
 
 
 
-  // 8. Check for successful rows
+  // 10. Check for successful rows
 
 
 
-  // 9. Block rotation functions
+  // 11. Block rotation functions
 
 
 
-  // 10. Game end conditions
+  // 12. Game end conditions
 
 
 
-  // 11. Scoring
+  // 13. Scoring
 
 
 
-  // 12. Play function
+  // 14. Play function
   function play () {
-
+    fall()
+    setTimeout(play, 2000)
   }
 
   createGrid()
   createTetrominos()
   createBlock()
   addBlock()
-  fall()
+  play()
+
+  // DOM listener events.
+  document.addEventListener('keyup', moveBlock)
+
   // EXTRAS
 
   // a. Levels
