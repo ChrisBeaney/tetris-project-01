@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded',() => {
     })
   }
 
+  // return 'true' if the block runs out of space OR if the square below contains a 'locked' block.
   function cannotMove(index) {
     return !squares[index + width + currentPosition] ||
       squares[index + width + currentPosition].classList.contains('locked')
@@ -89,7 +90,7 @@ document.addEventListener('DOMContentLoaded',() => {
     // What object am I trying to move here?
     // Do I need to track the block's position in fall() function?
     // something like . . . currentPosition = currentBlock.map(element => element + offSet)
-    currentBlock.classList.remove('block')
+    currentBlock.forEach(index => squares[index + currentPosition].classList.remove('block'))
 
     switch(e.keyCode) {
       case 37:
@@ -103,7 +104,7 @@ document.addEventListener('DOMContentLoaded',() => {
         break
     }
 
-    currentBlock.classList.add('block')
+    currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
 
   }
 
