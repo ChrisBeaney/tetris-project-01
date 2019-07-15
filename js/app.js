@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded',() => {
     if(currentBlock.some(cannotMove)) {
       lockBlocks()
       clearInterval(timerId)
+      gameOver()
       return initialise()
     }
 
@@ -92,12 +93,13 @@ document.addEventListener('DOMContentLoaded',() => {
     switch(e.keyCode) {
       // Moving left
       case 37:
-      // NOTE: Will likely be necessary to update once rotating implemented.
+      // TODO: Will likely be necessary to update once rotating implemented.
+      // TODO: add horizontal collision prevention
         if(currentPosition % width !== 0) currentPosition -= 1
         break
       // Moving right
       case 39:
-        console.log(currentBlock)
+        // TODO: add horizontal collision prevention
         if(currentBlock.some(index => (currentPosition + index) % width === width - 1)) {
           break
         } else if (currentPosition % width < width - 1) currentPosition += 1
@@ -139,7 +141,14 @@ document.addEventListener('DOMContentLoaded',() => {
 
   // 11. Game end conditions
   function gameOver () {
-    console.log('Game Over.')
+    for(let i=0; i<10; i++) {
+      if(squares[i].classList.contains('locked')) {
+        console.log('Game over man, game over!')
+        // TODO: How to exit a program?
+        exit(0)
+      }
+    }
+
   }
 
   // 12. Scoring
