@@ -4,14 +4,13 @@ const height = 20
 const squares = []
 const tetrominoArray = []
 let currentBlock = null
-let currentIndex = null
+let currentPosition = 4
 let timerId = null
 
 
 document.addEventListener('DOMContentLoaded',() => {
   // 0. Create DOM variables
   const grid = document.querySelector('.game-grid')
-
 
   // 1. Create Grid
   // Create grid of 200 divs.
@@ -48,120 +47,95 @@ document.addEventListener('DOMContentLoaded',() => {
   // 3. Pick a random tetromino.
   function createBlock () {
     const randomBlockIndex = Math.floor(Math.random() * tetrominoArray.length)
-    const block = tetrominoArray[randomBlockIndex]
-    currentBlock = block
-  }
-
-  function createCurrentIndex () {
-    currentIndex = Math.floor(Math.random() * 2 + 3)
+    currentBlock = tetrominoArray[randomBlockIndex]
   }
 
   // 4. Add the random tetromino to the grid.
   function addBlock () {
-    createCurrentIndex()
     currentBlock.forEach(index => {
-      squares[index + currentIndex].classList.add('block')
+      squares[index + currentPosition].classList.add('block')
     })
   }
 
+  function cannotMove(index) {
+    return !squares[index + width + currentPosition] ||
+      squares[index + width + currentPosition].classList.contains('locked')
+  }
 
   // 5. Make blocks fall.
   function fall () {
-    for(let i = squares.length-1; i >= 0; i--) {
-      if(squares[i].classList.contains('block')) {
-        // Check for grid's bottom or square below.
-        if(i > height * width - width || squares[i + 10].classList.contains('block')) {
-          lockBlocks()
-          break
-          // Create a new block, add it, make it fall.
-        }
-        squares[i].classList.remove('block')
-        squares[i + 10].classList.add('block')
-      }
+    // if the block below either doesn't exists OR is already a block
+    if(currentBlock.some(cannotMove)) {
+      lockBlocks()
+      clearInterval(timerId)
+      return initialise()
     }
+
+    // remove block
+    currentBlock.forEach(index => squares[index + currentPosition].classList.remove('block'))
+    // update currentPosition
+    currentPosition += width
+    // redraw block
+    currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
   }
 
+  // 6. Add 'locked' class to blocks in place.
   function lockBlocks () {
-    for(let i=0; i < squares.length; i++) {
-      if(squares[i].classList.contains('block')) {
-        squares[i].classList.add('locked')
-      }
-    }
+    currentBlock.forEach(index => squares[index + currentPosition].classList.add('locked'))
   }
 
-  // 6. Move Shapes (left/right movement 'A''D', then 'S')
-  // function moveBlock(e) {
-  //
-  //   currentBlock.classList.remove('block')
-  //
-  //   switch(e.keyCode) {
-  //     case 37:
-  //       if(currentIndex % width !== 0) currentIndex -= 1
-  //       break
-  //     case 39:
-  //       if(currentIndex % width < width - 1) currentIndex += 1
-  //       break
-  //     case 40:
-  //       if(currentIndex + width < width * height) currentIndex += width
-  //       break
-  //   }
-  //
-  //   currentBlock.classList.add('block')
-  //
-  // }
+  // 7. Move Shapes
+  function moveBlock(e) {
+    // What object am I trying to move here?
+    // Do I need to track the block's position in fall() function?
+    // something like . . . currentPosition = currentBlock.map(element => element + offSet)
+    currentBlock.classList.remove('block')
 
+    switch(e.keyCode) {
+      case 37:
+        if(currentPosition % width !== 0) currentPosition -= 1
+        break
+      case 39:
+        if(currentPosition % width < width - 1) currentPosition += 1
+        break
+      case 40:
+        if(currentPosition + width < width * height) currentPosition += width
+        break
+    }
 
-  // 7. Detect Sides
+    currentBlock.classList.add('block')
 
+  }
 
+  // 8. Detect Sides
 
-  // 8a. Detect grid bottom
-
-
-
-  // 8b. Detect vertical collision with placed blocks
-
-
-
-  // 9. Create new blocks
-
-
+  // 9. Detect vertical collision with placed blocks
 
   // 10. Check for successful rows
 
-
-
   // 11. Block rotation functions
 
-
-
   // 12. Game end conditions
-
-
+  function gameOver () {
+    console.log('Game Over.')
+  }
 
   // 13. Scoring
 
-
-
   // 14. Play function
   function initialise () {
-    fall()
-    setTimeout(initialise, 500)
+    currentPosition = 4
+    createBlock()
+    addBlock()
+    timerId = setInterval(fall, 500)
   }
-
-  // function continue () {
-  //   createBlock()
-  //   addBlock()
-  // }
 
   createGrid()
   createTetrominos()
-  createBlock()
-  addBlock()
   initialise()
 
   // DOM listener events.
-  // document.addEventListener('keyup', moveBlock)
+  document.addEventListener('keyup', moveBlock)
 
   // EXTRAS
 

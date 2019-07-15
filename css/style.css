@@ -25,5 +25,9 @@ body {
 }
 
 .block {
+  background-color: grey;
+}
+
+.locked {
   background-color: black;
 }
