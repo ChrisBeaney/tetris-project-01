@@ -52,47 +52,63 @@ document.addEventListener('DOMContentLoaded',() => {
     currentBlock = block
   }
 
+  function createCurrentIndex () {
+    currentIndex = Math.floor(Math.random() * 2 + 3)
+  }
+
   // 4. Add the random tetromino to the grid.
-  // TODO: make block appear in a random central block.
   function addBlock () {
+    createCurrentIndex()
     currentBlock.forEach(index => {
-      squares[index].classList.add('block')
+      squares[index + currentIndex].classList.add('block')
     })
   }
 
 
   // 5. Make blocks fall.
-  // TODO: lock blocks when they hit the bottom of the grid.
   function fall () {
     for(let i = squares.length-1; i >= 0; i--) {
       if(squares[i].classList.contains('block')) {
+        // Check for grid's bottom or square below.
+        if(i > height * width - width || squares[i + 10].classList.contains('block')) {
+          lockBlocks()
+          break
+          // Create a new block, add it, make it fall.
+        }
         squares[i].classList.remove('block')
         squares[i + 10].classList.add('block')
       }
     }
   }
 
+  function lockBlocks () {
+    for(let i=0; i < squares.length; i++) {
+      if(squares[i].classList.contains('block')) {
+        squares[i].classList.add('locked')
+      }
+    }
+  }
 
   // 6. Move Shapes (left/right movement 'A''D', then 'S')
-  function moveBlock(e) {
-
-    currentBlock.classList.remove('block')
-
-    switch(e.keyCode) {
-      case 37:
-        if(currentIndex % width !== 0) currentIndex -= 1
-        break
-      case 39:
-        if(currentIndex % width < width - 1) currentIndex += 1
-        break
-      case 40:
-        if(currentIndex + width < width * height) currentIndex += width
-        break
-    }
-
-    currentBlock.classList.add('block')
-
-  }
+  // function moveBlock(e) {
+  //
+  //   currentBlock.classList.remove('block')
+  //
+  //   switch(e.keyCode) {
+  //     case 37:
+  //       if(currentIndex % width !== 0) currentIndex -= 1
+  //       break
+  //     case 39:
+  //       if(currentIndex % width < width - 1) currentIndex += 1
+  //       break
+  //     case 40:
+  //       if(currentIndex + width < width * height) currentIndex += width
+  //       break
+  //   }
+  //
+  //   currentBlock.classList.add('block')
+  //
+  // }
 
 
   // 7. Detect Sides
@@ -128,19 +144,24 @@ document.addEventListener('DOMContentLoaded',() => {
 
 
   // 14. Play function
-  function play () {
+  function initialise () {
     fall()
-    setTimeout(play, 2000)
+    setTimeout(initialise, 500)
   }
+
+  // function continue () {
+  //   createBlock()
+  //   addBlock()
+  // }
 
   createGrid()
   createTetrominos()
   createBlock()
   addBlock()
-  play()
+  initialise()
 
   // DOM listener events.
-  document.addEventListener('keyup', moveBlock)
+  // document.addEventListener('keyup', moveBlock)
 
   // EXTRAS
 
