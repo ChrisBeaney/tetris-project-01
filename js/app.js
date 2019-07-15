@@ -80,25 +80,30 @@ document.addEventListener('DOMContentLoaded',() => {
     currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
   }
 
-  // 6. Add 'locked' class to blocks in place.
+  // 6. Add 'locked' class to blocks that cannot move.
   function lockBlocks () {
     currentBlock.forEach(index => squares[index + currentPosition].classList.add('locked'))
   }
 
   // 7. Move Shapes
   function moveBlock(e) {
-    // What object am I trying to move here?
-    // Do I need to track the block's position in fall() function?
-    // something like . . . currentPosition = currentBlock.map(element => element + offSet)
     currentBlock.forEach(index => squares[index + currentPosition].classList.remove('block'))
 
     switch(e.keyCode) {
+      // Moving left
       case 37:
+      // NOTE: Will likely be necessary to update once rotating implemented.
         if(currentPosition % width !== 0) currentPosition -= 1
         break
+      // Moving right
       case 39:
-        if(currentPosition % width < width - 1) currentPosition += 1
+        console.log(currentBlock)
+        if(currentBlock.some(index => (currentPosition + index) % width === width - 1)) {
+          break
+        } else if (currentPosition % width < width - 1) currentPosition += 1
+        console.log(currentPosition)
         break
+      // Moving down
       case 40:
         if(currentPosition + width < width * height) currentPosition += width
         break
@@ -108,22 +113,38 @@ document.addEventListener('DOMContentLoaded',() => {
 
   }
 
-  // 8. Detect Sides
+  // 8. Detect Sides - do this in blockMove()?
 
-  // 9. Detect vertical collision with placed blocks
+  // 9. Check for successful rows
+  function checkRows () {
+    // Look through the squares 10 at a time.
+    // squares.forEach(index => )
+    // Can I use currentPosition to avoid checking through the whole squares array.
+    // If all contain the class 'locked':
+    // Remove the 'locked' class to clear the line.
+    // Drop any locked blocks above.
+    // Increment score.
+  }
 
-  // 10. Check for successful rows
+  // 10. Block rotation function
+  // function rotateBlock (e) {
+  //   currentBlock.forEach(index => squares[index + currentPosition].classList.remove('block'))
+  //
+  //   switch(e.keyCode) {
+  //     case 38:
+  //
+  //   }
+  // currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
+  // }
 
-  // 11. Block rotation functions
-
-  // 12. Game end conditions
+  // 11. Game end conditions
   function gameOver () {
     console.log('Game Over.')
   }
 
-  // 13. Scoring
+  // 12. Scoring
 
-  // 14. Play function
+  // 13. Play function
   function initialise () {
     currentPosition = 4
     createBlock()
