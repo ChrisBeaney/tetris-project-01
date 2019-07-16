@@ -27,7 +27,10 @@ document.addEventListener('DOMContentLoaded',() => {
   // 2. Create Blocks
   function createTetrominos () {
     const shapeO = [0, 1, width, 1 + width]
-    const shapeI = [0, 1, 2, 3]
+    const shapeI = [
+      [0, 1, 2, 3],
+      [0,1*width,2*width,3*width]
+    ]
     const shapeT = [0, 1, 2, 1 + width]
     const shapeL = [0, 1, 2, width]
     const shapeJ = [0, 1, 2, 2 + width]
@@ -44,24 +47,24 @@ document.addEventListener('DOMContentLoaded',() => {
   }
 
   // 2a. Add Tetromino rotations, (none required for '0' block).
-  const shapeI90 = [0, width, 2*width, 3*width]
-  const shapeI180 = [3,2,1,0]
-  const shapeI270 = [3*width, 2*width, width, 0]
-  const shapeT90 = []
-  const shapeT180 = []
-  const shapeT270 = []
-  const shapeL90 = []
-  const shapeL180 = []
-  const shapeL270 = []
-  const shapeJ90 = []
-  const shapeJ180 = []
-  const shapeJ270 = []
-  const shapeS90 = []
-  const shapeS180 = []
-  const shapeS270 = []
-  const shapeZ90 = []
-  const shapeZ180 = []
-  const shapeZ270 = []
+  // const shapeI90 = [0, width, 2*width, 3*width]
+  // const shapeI180 = [3,2,1,0]
+  // const shapeI270 = [3*width, 2*width, width, 0]
+  // const shapeT90 = []
+  // const shapeT180 = []
+  // const shapeT270 = []
+  // const shapeL90 = []
+  // const shapeL180 = []
+  // const shapeL270 = []
+  // const shapeJ90 = []
+  // const shapeJ180 = []
+  // const shapeJ270 = []
+  // const shapeS90 = []
+  // const shapeS180 = []
+  // const shapeS270 = []
+  // const shapeZ90 = []
+  // const shapeZ180 = []
+  // const shapeZ270 = []
 
   // 3. Pick a random tetromino.
   function createBlock () {
@@ -193,10 +196,13 @@ document.addEventListener('DOMContentLoaded',() => {
   // 9c. Drag lines above down.
   function lineDown (startIndex, stopIndex) {
     console.log(`lineDown() running with start of ${startIndex} and end of ${stopIndex}`)
-    for(let i=startIndex; i<=stopIndex; i++) {
+    for(let i=startIndex; i<=startIndex + stopIndex; i++) {
       if(squares[i-width].classList.contains('locked')) {
+        console.log('Removing classes')
         squares[i-width].classList.remove('block')
         squares[i-width].classList.remove('locked')
+        // Not working, removes the line above but does not redraw it below.
+        console.log('Adding classes below.')
         squares[i].classList.add('block')
         squares[i].classList.add('locked')
       }
