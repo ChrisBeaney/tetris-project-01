@@ -1,17 +1,18 @@
 * {
   box-sizing: border-box;
-  background-color: yellow;
 }
 
 body {
   margin: 0;
   display: flex;
   justify-content: center;
+  background: linear-gradient(rgba(0,0,0,0.88), rgba(0,0,0,0.88)), url('/Users/ronaldbeaney/development/tetris-project-01/images/wp2675338-tetris-wallpaper.jpg');
+  background-size: cover;
 }
 
 .wrapper {
   width: 40%;
-  margin-top: 60px;
+  margin-top: 150px;
   display: flex;
   flex-direction: row;
 }
@@ -25,11 +26,19 @@ body {
 .info-grid {
   width: 40%;
   background: grey;
+  display: flex;
+  flex-direction: column;
 }
 
 .info {
   height: 25%;
   background: grey;
+}
+
+#button-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;  
 }
 
 #start {
