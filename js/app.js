@@ -1,7 +1,7 @@
 // Variables
 const width = 10
 const height = 20
-const squares = []
+let squares = []
 const tetrominoArray = []
 let currentBlock = null
 let currentPosition = 4
@@ -200,11 +200,26 @@ document.addEventListener('DOMContentLoaded',() => {
           // TODO: Make blocks above fall.
           // TODO: Increment score.
           // clearLines(i)
+          spliceLine(i)
           score ++
         }
       }
     }
   }
+
+  function spliceLine(start) {
+    console.log(`Splicing line at ${start}`)
+    const removedLine = squares.splice(start, width)
+    removedLine.forEach(element => {
+      element.classList.remove('block')
+      element.classList.remove('locked')
+    })
+    console.log(`Removed line: ${removedLine}`)
+    squares = removedLine.concat(squares)
+    squares.forEach(element => grid.appendChild(element))
+  }
+
+
 
   // 9b. clearLines after a successful row.
   // function clearLines(startIndex) {
