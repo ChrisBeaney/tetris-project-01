@@ -9,10 +9,13 @@ let currentPattern = 0
 let currentArrayIndex = null
 let timerId = null
 let score = 0
+let lines = 0
 
 document.addEventListener('DOMContentLoaded',() => {
   // Create DOM variables
   const grid = document.querySelector('.game-grid')
+  const scoreDisplay = document.getElementById('user-score')
+  const lineDisplay = document.getElementById('total-lines')
 
   // Create Grid
   // Create grid of 200 divs.
@@ -200,7 +203,7 @@ document.addEventListener('DOMContentLoaded',() => {
           // TODO: Increment score.
           // clearLines(i)
           spliceLine(i)
-          score ++
+          score += 10
         }
       }
     }

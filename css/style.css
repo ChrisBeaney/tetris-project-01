@@ -27,6 +27,27 @@ body {
   background: grey;
 }
 
+.info {
+  height: 25%;
+  background: grey;
+}
+/* .button-container {
+  height: 25%;
+}
+
+.scoreboard {
+  height: 25%;
+}
+
+.lines {
+  height: 25%;
+}
+
+.next {
+  height:25%;
+} */
+
+/* GAME BLOCKS */
 .square {
   border: 1px solid green;
   width: 10%;
