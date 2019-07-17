@@ -5,6 +5,7 @@ const squares = []
 const tetrominoArray = []
 let currentBlock = null
 let currentPosition = 4
+let currentPattern = 0
 let timerId = null
 let score = 0
 
@@ -26,16 +27,43 @@ document.addEventListener('DOMContentLoaded',() => {
 
   // 2. Create Blocks
   function createTetrominos () {
-    const shapeO = [0, 1, width, 1 + width]
+    const shapeO = [[0, 1, width, 1 + width]]
     const shapeI = [
-      [0, 1, 2, 3],
-      [0,1*width,2*width,3*width]
+      [width, 1+width, 2+width, 3+width],
+      [2, 2+width, 2*width+2, 3*width+2],
+      [2*width+3, 2*width+2, 2*width+1, 2*width],
+      [3*width+1, 2*width+1, width+1, 1]
     ]
-    const shapeT = [0, 1, 2, 1 + width]
-    const shapeL = [0, 1, 2, width]
-    const shapeJ = [0, 1, 2, 2 + width]
-    const shapeS = [1, 2, width, 1 + width]
-    const shapeZ = [0, 1, 1 + width, 2 + width]
+    const shapeT = [
+      [width, width+1, width+2, 1],
+      [1, 1+width, 2*width+1, 2+width],
+      [2+width, 1+width, width, 2*width+1],
+      [2*width+1, 1+width, 1, width]
+    ]
+    const shapeL = [
+      [width, 1+width, 2+width, 2],
+      [1, 1+width, 2*width+1, 2*width+2],
+      [2+width, 1+width, width, 2*width],
+      [2*width+1, 1+width, 1, 0]
+    ]
+    const shapeJ = [
+      [width, 1+width, 2+width, 0],
+      [1, 1+width, 2*width+1, 2],
+      [2+width, 1+width, width, 2*width+2],
+      [2*width+1, 1+width, 1, 2*width]
+    ]
+    const shapeS = [
+      [1, 2, width, 1+width],
+      [2+width, 2*width+2, 1, 1+width],
+      [2*width+1, 2*width, 2+width, 1+width],
+      [width, 0, 2*width+1, width+1]
+    ]
+    const shapeZ = [
+      [0, 1, 1 + width, 2 + width],
+      [2, 2+width, 1+width, 2*width+1],
+      [2*width+2, 2*width+1, 1+width, width],
+      [2*width, width, 1+width, 1]
+    ]
 
     tetrominoArray.push(shapeO)
     tetrominoArray.push(shapeI)
@@ -46,34 +74,15 @@ document.addEventListener('DOMContentLoaded',() => {
     tetrominoArray.push(shapeZ)
   }
 
-  // 2a. Add Tetromino rotations, (none required for '0' block).
-  // const shapeI90 = [0, width, 2*width, 3*width]
-  // const shapeI180 = [3,2,1,0]
-  // const shapeI270 = [3*width, 2*width, width, 0]
-  // const shapeT90 = []
-  // const shapeT180 = []
-  // const shapeT270 = []
-  // const shapeL90 = []
-  // const shapeL180 = []
-  // const shapeL270 = []
-  // const shapeJ90 = []
-  // const shapeJ180 = []
-  // const shapeJ270 = []
-  // const shapeS90 = []
-  // const shapeS180 = []
-  // const shapeS270 = []
-  // const shapeZ90 = []
-  // const shapeZ180 = []
-  // const shapeZ270 = []
-
   // 3. Pick a random tetromino.
   function createBlock () {
     const randomBlockIndex = Math.floor(Math.random() * tetrominoArray.length)
-    currentBlock = tetrominoArray[randomBlockIndex]
+    currentBlock = tetrominoArray[randomBlockIndex][currentPattern]
   }
 
   // 4. Add the random tetromino to the grid.
   function addBlock () {
+    console.log(currentBlock)
     currentBlock.forEach(index => {
       squares[index + currentPosition].classList.add('block')
     })
@@ -117,16 +126,13 @@ document.addEventListener('DOMContentLoaded',() => {
     switch(e.keyCode) {
       // Moving left
       case 37:
-      // TODO: Will likely be necessary to update once rotating implemented.
-      // TODO: add horizontal collision prevention
-        // if(currentBlock.some(index => (currentPosition - index) % width === 0)) {
+        // if(currentBlock.some(index => (currentPosition + index) % width === 0)) {
         //   break
         // } else
         if(currentPosition % width !== 0 && !collisionLeft()) currentPosition -= 1
         break
       // Moving right
       case 39:
-        // TODO: add horizontal collision prevention
         if((currentBlock.some(index => (currentPosition + index) % width === width - 1)) || collisionRight()) {
           break
         } else if (currentPosition % width < width - 1) currentPosition += 1
@@ -154,7 +160,7 @@ document.addEventListener('DOMContentLoaded',() => {
 
   function collisionRight () {
     let collision = false
-    // If square to the left or to the right is 'locked'
+    // If square to the left or to the right is 'locked'.
     // set collision to true and return from the function.
     if(currentBlock.forEach(index => squares[index + currentPosition + 1].classList.contains('locked'))) {
       collision = true
@@ -210,15 +216,18 @@ document.addEventListener('DOMContentLoaded',() => {
   }
 
   // 10. Block rotation function
-  // function rotateBlock (e) {
-  //   currentBlock.forEach(index => squares[index + currentPosition].classList.remove('block'))
-  //
-  //   switch(e.keyCode) {
-  //     case 38:
-  //
-  //   }
-  // currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
-  // }
+  function rotateBlock (e) {
+    currentBlock.forEach(index => squares[index + currentPosition].classList.remove('block'))
+
+    switch(e.keyCode) {
+      case 38:
+        currentPattern++
+        if(currentPattern === currentBlock.length) {
+          currentPattern = 0
+        }
+    }
+    currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
+  }
 
   // 11. Game end conditions
   function gameOver () {
@@ -229,7 +238,6 @@ document.addEventListener('DOMContentLoaded',() => {
         exit(0)
       }
     }
-
   }
 
   // 12. Scoring
@@ -248,6 +256,7 @@ document.addEventListener('DOMContentLoaded',() => {
 
   // DOM listener events.
   document.addEventListener('keyup', moveBlock)
+  document.addEventListener('keyup', rotateBlock)
 
   // EXTRAS
 
