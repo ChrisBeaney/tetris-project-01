@@ -6,14 +6,25 @@
 body {
   margin: 0;
   display: flex;
+  justify-content: center;
+}
+
+.wrapper {
+  width: 40%;
+  margin-top: 60px;
+  display: flex;
+  flex-direction: row;
 }
 
 .game-grid {
-  width: 50%;
-  margin: 0 auto;
-  margin-top: 50px;
+  width: 60%;
   display: flex;
   flex-wrap: wrap;
+}
+
+.info-grid {
+  width: 40%;
+  background: grey;
 }
 
 .square {
