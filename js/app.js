@@ -11,10 +11,10 @@ let timerId = null
 let score = 0
 
 document.addEventListener('DOMContentLoaded',() => {
-  // 0. Create DOM variables
+  // Create DOM variables
   const grid = document.querySelector('.game-grid')
 
-  // 1. Create Grid
+  // Create Grid
   // Create grid of 200 divs.
   function createGrid() {
     for (let i=0; i<width * height; i++) {
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded',() => {
     }
   }
 
-  // 2. Create Blocks
+  // Create Blocks
   function createTetrominos () {
     const shapeO = [
       [0, 1, width, 1 + width],
@@ -36,37 +36,44 @@ document.addEventListener('DOMContentLoaded',() => {
     ]
     const shapeI = [
       [width, 1+width, 2+width, 3+width],
-      [2, 2+width, 2*width+2, 3*width+2],
+      [0, width, 2*width, 3*width],
+      // [2, 2+width, 2*width+2, 3*width+2],
       [2*width+3, 2*width+2, 2*width+1, 2*width],
-      [3*width+1, 2*width+1, width+1, 1]
+      // [3*width+1, 2*width+1, width+1, 1]
+      [3*width, 2*width, width,0]
     ]
     const shapeT = [
       [width, width+1, width+2, 1],
-      [1, 1+width, 2*width+1, 2+width],
+      // [1, 1+width, 2*width+1, 2+width],
+      [0, width, 2*width, 1+width],
       [2+width, 1+width, width, 2*width+1],
       [2*width+1, 1+width, 1, width]
     ]
     const shapeL = [
       [width, 1+width, 2+width, 2],
-      [1, 1+width, 2*width+1, 2*width+2],
+      // [1, 1+width, 2*width+1, 2*width+2],
+      [0, width, 2*width, 2*width+1],
       [2+width, 1+width, width, 2*width],
       [2*width+1, 1+width, 1, 0]
     ]
     const shapeJ = [
       [width, 1+width, 2+width, 0],
-      [1, 1+width, 2*width+1, 2],
+      // [1, 1+width, 2*width+1, 2],
+      [0, width, 2*width, 1],
       [2+width, 1+width, width, 2*width+2],
       [2*width+1, 1+width, 1, 2*width]
     ]
     const shapeS = [
       [1, 2, width, 1+width],
-      [2+width, 2*width+2, 1, 1+width],
+      // [2+width, 2*width+2, 1, 1+width],
+      [0, width, width+1, 2*width+1],
       [2*width+1, 2*width, 2+width, 1+width],
       [width, 0, 2*width+1, width+1]
     ]
     const shapeZ = [
       [0, 1, 1 + width, 2 + width],
-      [2, 2+width, 1+width, 2*width+1],
+      // [2, 2+width, 1+width, 2*width+1],
+      [width, 2*width, width+1, 1],
       [2*width+2, 2*width+1, 1+width, width],
       [2*width, width, 1+width, 1]
     ]
@@ -80,7 +87,7 @@ document.addEventListener('DOMContentLoaded',() => {
     tetrominoArray.push(shapeZ)
   }
 
-  // 3. Pick a random tetromino.
+  // Pick a random tetromino.
   function createBlock () {
     const randomBlockIndex = Math.floor(Math.random() * tetrominoArray.length)
     // messy code.
@@ -88,7 +95,7 @@ document.addEventListener('DOMContentLoaded',() => {
     currentBlock = tetrominoArray[currentArrayIndex][currentPattern]
   }
 
-  // 4. Add the random tetromino to the grid.
+  // Add the random tetromino to the grid.
   function addBlock () {
     console.log(currentBlock)
     currentBlock.forEach(index => {
@@ -102,7 +109,7 @@ document.addEventListener('DOMContentLoaded',() => {
       squares[index + width + currentPosition].classList.contains('locked')
   }
 
-  // 5. Make blocks fall.
+  // Make blocks fall.
   function fall () {
     // if the block below either doesn't exists OR is already a block
     if(currentBlock.some(cannotMove)) {
@@ -122,22 +129,23 @@ document.addEventListener('DOMContentLoaded',() => {
     currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
   }
 
-  // 6. Add 'locked' class to blocks that cannot move.
+  // Add 'locked' class to blocks that cannot move.
   function lockBlocks () {
     currentBlock.forEach(index => squares[index + currentPosition].classList.add('locked'))
   }
 
-  // 7. Move Shapes
+  // Move Shapes
   function moveBlock(e) {
     currentBlock.forEach(index => squares[index + currentPosition].classList.remove('block'))
 
     switch(e.keyCode) {
       // Moving left
       case 37:
-        // if(currentBlock.some(index => (currentPosition + index) % width === 0)) {
-        //   break
-        // } else
-        if(currentPosition % width !== 0 && !collisionLeft()) currentPosition -= 1
+        // NOT WORKING AS INTENDED.
+        if(currentBlock.some(index => (currentPosition + index) % width === 0)) {
+          break
+        } else
+        if(currentPosition % width !== 0) currentPosition -= 1
         break
       // Moving right
       case 39:
@@ -156,15 +164,15 @@ document.addEventListener('DOMContentLoaded',() => {
   }
 
   // 8. Detect Horizontal collisions with 'locked' squares - run function in blockMove()
-  function collisionLeft () {
-    let collision = false
-    // If square to the left or to the right is 'locked'
-    // set collision to true and return from the function.
-    if(currentBlock.forEach(index => squares[index + currentPosition - 1].classList.contains('locked'))) {
-      collision = true
-      return collision
-    }
-  }
+  // function collisionLeft () {
+  //   let collision = false
+  //   // If square to the left or to the right is 'locked'
+  //   // set collision to true and return from the function.
+  //   if(currentBlock.forEach(index => squares[index + currentPosition - 1].classList.contains('locked'))) {
+  //     collision = true
+  //     return collision
+  //   }
+  // }
 
   function collisionRight () {
     let collision = false
@@ -191,7 +199,7 @@ document.addEventListener('DOMContentLoaded',() => {
         if(counter === 10) {
           // TODO: Make blocks above fall.
           // TODO: Increment score.
-          clearLines(i,j)
+          // clearLines(i)
           score ++
         }
       }
@@ -199,29 +207,29 @@ document.addEventListener('DOMContentLoaded',() => {
   }
 
   // 9b. clearLines after a successful row.
-  function clearLines(startIndex, stopIndex) {
-    for(let i=startIndex; i<=startIndex + stopIndex; i++) {
-      squares[i].classList.remove('block')
-      squares[i].classList.remove('locked')
-      lineDown(startIndex, stopIndex)
-    }
-  }
+  // function clearLines(startIndex) {
+  //   for(let i=startIndex; i<startIndex + width; i++) {
+  //     squares[i].classList.remove('block')
+  //     squares[i].classList.remove('locked')
+  //     lineDown(startIndex)
+  //   }
+  // }
 
   // 9c. Drag lines above down.
-  function lineDown (startIndex, stopIndex) {
-    console.log(`lineDown() running with start of ${startIndex} and end of ${stopIndex}`)
-    for(let i=startIndex; i<=startIndex + stopIndex; i++) {
-      if(squares[i-width].classList.contains('locked')) {
-        console.log('Removing classes')
-        squares[i-width].classList.remove('block')
-        squares[i-width].classList.remove('locked')
-        // Not working, removes the line above but does not redraw it below.
-        console.log('Adding classes below.')
-        squares[i].classList.add('block')
-        squares[i].classList.add('locked')
-      }
-    }
-  }
+  // function lineDown (startIndex) {
+  //   console.log(`lineDown() running with start of ${startIndex}.`)
+  //   for(let i=startIndex; i < startIndex + width; i++) {
+  //     if(squares[i-width].classList.contains('locked')) {
+  //       console.log('Removing classes')
+  //       squares[i-width].classList.remove('block')
+  //       squares[i-width].classList.remove('locked')
+  //       // Not working, removes the line above but does not redraw it below.
+  //       console.log('Adding classes below.')
+  //       squares[i].classList.add('block')
+  //       squares[i].classList.add('locked')
+  //     }
+  //   }
+  // }
 
   // 10. Block rotation function
   function rotateBlock (e) {
@@ -229,13 +237,12 @@ document.addEventListener('DOMContentLoaded',() => {
 
     switch(e.keyCode) {
       case 38:
+        // Feels like currentPosition may be causing left wall issues.
         currentPattern++
         if(currentPattern === currentBlock.length) {
           currentPattern = 0
         }
         currentBlock = tetrominoArray[currentArrayIndex][currentPattern]
-        console.log(`Current pattern is: ${currentPattern}`)
-        console.log(`Current block is ${currentBlock}`)
     }
 
     currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
