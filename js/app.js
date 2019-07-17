@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded',() => {
   const grid = document.querySelector('.game-grid')
   const scoreDisplay = document.getElementById('user-score')
   const lineDisplay = document.getElementById('total-lines')
+  const startBtn = document.getElementById('start')
 
   // Create Grid
   // Create grid of 200 divs.
@@ -204,6 +205,9 @@ document.addEventListener('DOMContentLoaded',() => {
           // clearLines(i)
           spliceLine(i)
           score += 10
+          lines ++
+          updateScoreboard()
+          updateLines()
         }
       }
     }
@@ -221,34 +225,16 @@ document.addEventListener('DOMContentLoaded',() => {
     squares.forEach(element => grid.appendChild(element))
   }
 
+  // Update score + scoreboard
+  function updateScoreboard () {
+    scoreDisplay.innerHTML = score
+  }
 
+  function updateLines () {
+    lineDisplay.innerHTML = lines
+  }
 
-  // 9b. clearLines after a successful row.
-  // function clearLines(startIndex) {
-  //   for(let i=startIndex; i<startIndex + width; i++) {
-  //     squares[i].classList.remove('block')
-  //     squares[i].classList.remove('locked')
-  //     lineDown(startIndex)
-  //   }
-  // }
-
-  // 9c. Drag lines above down.
-  // function lineDown (startIndex) {
-  //   console.log(`lineDown() running with start of ${startIndex}.`)
-  //   for(let i=startIndex; i < startIndex + width; i++) {
-  //     if(squares[i-width].classList.contains('locked')) {
-  //       console.log('Removing classes')
-  //       squares[i-width].classList.remove('block')
-  //       squares[i-width].classList.remove('locked')
-  //       // Not working, removes the line above but does not redraw it below.
-  //       console.log('Adding classes below.')
-  //       squares[i].classList.add('block')
-  //       squares[i].classList.add('locked')
-  //     }
-  //   }
-  // }
-
-  // 10. Block rotation function
+  // Block rotation function
   function rotateBlock (e) {
     currentBlock.forEach(index => squares[index + currentPosition].classList.remove('block'))
 
@@ -265,7 +251,7 @@ document.addEventListener('DOMContentLoaded',() => {
     currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
   }
 
-  // 11. Game end conditions
+  // Game end conditions
   function gameOver () {
     for(let i=0; i<10; i++) {
       if(squares[i].classList.contains('locked')) {
@@ -276,9 +262,7 @@ document.addEventListener('DOMContentLoaded',() => {
     }
   }
 
-  // 12. Scoring
-
-  // 13. Play function
+  // Play function
   function initialise () {
     currentPosition = 4
     currentPattern = 0
@@ -289,11 +273,12 @@ document.addEventListener('DOMContentLoaded',() => {
 
   createGrid()
   createTetrominos()
-  initialise()
+  // initialise()
 
   // DOM listener events.
   document.addEventListener('keyup', moveBlock)
   document.addEventListener('keyup', rotateBlock)
+  startBtn.addEventListener('click', initialise)
 
   // EXTRAS
 
