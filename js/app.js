@@ -6,6 +6,7 @@ const tetrominoArray = []
 let currentBlock = null
 let currentPosition = 4
 let currentPattern = 0
+let currentArrayIndex = null
 let timerId = null
 let score = 0
 
@@ -27,7 +28,12 @@ document.addEventListener('DOMContentLoaded',() => {
 
   // 2. Create Blocks
   function createTetrominos () {
-    const shapeO = [[0, 1, width, 1 + width]]
+    const shapeO = [
+      [0, 1, width, 1 + width],
+      [0, 1, width, 1 + width],
+      [0, 1, width, 1 + width],
+      [0, 1, width, 1 + width]
+    ]
     const shapeI = [
       [width, 1+width, 2+width, 3+width],
       [2, 2+width, 2*width+2, 3*width+2],
@@ -77,7 +83,9 @@ document.addEventListener('DOMContentLoaded',() => {
   // 3. Pick a random tetromino.
   function createBlock () {
     const randomBlockIndex = Math.floor(Math.random() * tetrominoArray.length)
-    currentBlock = tetrominoArray[randomBlockIndex][currentPattern]
+    // messy code.
+    currentArrayIndex = randomBlockIndex
+    currentBlock = tetrominoArray[currentArrayIndex][currentPattern]
   }
 
   // 4. Add the random tetromino to the grid.
@@ -225,7 +233,11 @@ document.addEventListener('DOMContentLoaded',() => {
         if(currentPattern === currentBlock.length) {
           currentPattern = 0
         }
+        currentBlock = tetrominoArray[currentArrayIndex][currentPattern]
+        console.log(`Current pattern is: ${currentPattern}`)
+        console.log(`Current block is ${currentBlock}`)
     }
+
     currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
   }
 
@@ -245,6 +257,7 @@ document.addEventListener('DOMContentLoaded',() => {
   // 13. Play function
   function initialise () {
     currentPosition = 4
+    currentPattern = 0
     createBlock()
     addBlock()
     timerId = setInterval(fall, 500)
