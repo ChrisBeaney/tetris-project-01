@@ -6,13 +6,14 @@ body {
   margin: 0;
   display: flex;
   justify-content: center;
-  background: linear-gradient(rgba(0,0,0,0.88), rgba(0,0,0,0.88)), url('/Users/ronaldbeaney/development/tetris-project-01/images/wp2675338-tetris-wallpaper.jpg');
+  background: linear-gradient(rgba(11,12,16,0.88), rgba(11,12,16,0.88)), url('/Users/ronaldbeaney/development/tetris-project-01/images/wp2675338-tetris-wallpaper.jpg');
   background-size: cover;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .wrapper {
   width: 40%;
-  margin-top: 150px;
+  margin-top: 110px;
   display: flex;
   flex-direction: row;
 }
@@ -33,56 +34,92 @@ body {
 .info {
   height: 25%;
   background: grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #button-box {
   display: flex;
   align-items: center;
-  justify-content: center;  
+  justify-content: center;
 }
 
 #start {
-  background: #3498db;
-  /* background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
-  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
-  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
-  background-image: -o-linear-gradient(top, #3498db, #2980b9);
-  background-image: linear-gradient(to bottom, #3498db, #2980b9); */
+  background: #240090;
+  /* background-image: -webkit-linear-gradient(top, #240090, #2980b9);
+  background-image: -moz-linear-gradient(top, #240090, #2980b9);
+  background-image: -ms-linear-gradient(top, #240090, #2980b9);
+  background-image: -o-linear-gradient(top, #240090, #2980b9);
+  background-image: linear-gradient(to bottom, #240090, #2980b9); */
   /* -webkit-border-radius: 5;
   -moz-border-radius: 5; */
+  width: 60%;
+  height: 50%;
   border-radius: 5px;
-  text-shadow: 2px 2px 2px #666666;
-  font-family: Courier New;
+  text-shadow: 2px 2px 2px #282828;
   color: #ffffff;
-  font-size: 20px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 22px;
   padding: 5px 10px 5px 10px;
-  border: solid #1f628d 7px;
+  border: solid #190061 4px;
   text-decoration: none;
+  transition: 0.5s ease;
 }
 
 #start:hover {
-  background: #3cb0fd;
-  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  background: #3500D3;
+  border: solid #240090 4px;
+  background-image: -webkit-linear-gradient(top, #3500D3, #3498db);
+  background-image: -moz-linear-gradient(top, #3500D3, #3498db);
+  background-image: -ms-linear-gradient(top, #3500D3, #3498db);
+  background-image: -o-linear-gradient(top, #3500D3, #3498db);
+  background-image: linear-gradient(to bottom, #3500D3, #3498db);
   text-decoration: none;
+}
+
+#score-box, #line-box {
+  position: relative;
+  text-align: center;
+}
+
+#user-label, #line-label {
+  border: solid #190061 4px;
+  border-radius: 4px;
+  background: #240090;
+  color: #fff;
+  position: absolute;
+  width: 35%;
+  height: 30px;
+  top: 25px;
+  left: 5px;
+  padding: 3px;
+}
+
+#user-score, #total-lines {
+  border: solid #190061 4px;
+  border-radius: 4px;
+  background: #240090;
+  color: #fff;
+  width: 60%;
+  height: 60px;
+  padding-top: 10px;
+  font-size: 40px;
 }
 
 /* GAME BLOCKS */
 .square {
-  border: 1px solid green;
+  border: 1px solid #1F2833;
   width: 10%;
   /* TODO: Can I fix a height to scale with width? */
   height: 25px;
-  background-color: white;
+  background-color: #C5C6C7;
 }
 
 .block {
-  background-color: grey;
+  background-color: #3500D3;
 }
 
 .locked {
-  background-color: black;
+  background-color: #190061;
 }
