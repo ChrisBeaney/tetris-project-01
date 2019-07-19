@@ -135,10 +135,9 @@ document.addEventListener('DOMContentLoaded',() => {
     switch(e.keyCode) {
       // Moving left
       case 37:
-        if(currentBlock.some(index => (currentPosition + index) % width === 0)) {
+        if((currentBlock.some(index => (currentPosition + index) % width === 0)) || collisionLeft()) {
           break
-        } else
-        if(currentPosition % width !== 0) currentPosition -= 1
+        } else if(currentPosition % width !== 0) currentPosition -= 1
         break
       // Moving right
       case 39:
@@ -151,25 +150,24 @@ document.addEventListener('DOMContentLoaded',() => {
         if(currentPosition + width < width * height) currentPosition += width
         break
     }
-
     currentBlock.forEach(index => squares[index + currentPosition].classList.add('block'))
-
   }
 
-  // 8. Detect Horizontal collisions with 'locked' squares - run function in blockMove()
-  // function collisionLeft () {
-  //   let collision = false
-  //   // If square to the left or to the right is 'locked'
-  //   // set collision to true and return from the function.
-  //   if(currentBlock.forEach(index => squares[index + currentPosition - 1].classList.contains('locked'))) {
-  //     collision = true
-  //     return collision
-  //   }
-  // }
+  // Detect Horizontal collisions with 'locked' squares - run function in moveBlock()
+  function collisionLeft () {
+    let collision = false
+    // If square to the left is 'locked'
+    // set collision to true and return from the function.
+    if(currentBlock.forEach(index => squares[index + currentPosition - 1].classList.contains('locked'))) {
+      collision = true
+      console.log('Collision left')
+      return collision
+    }
+  }
 
   function collisionRight () {
     let collision = false
-    // If square to the left or to the right is 'locked'.
+    // If square to the right is 'locked'.
     // set collision to true and return from the function.
     if(currentBlock.forEach(index => squares[index + currentPosition + 1].classList.contains('locked'))) {
       collision = true
@@ -211,11 +209,12 @@ document.addEventListener('DOMContentLoaded',() => {
     squares.forEach(element => grid.appendChild(element))
   }
 
-  // Update score + scoreboard
+  // Update scoreboard
   function updateScoreboard () {
     scoreDisplay.innerHTML = score
   }
 
+  // Update line scoreboard.
   function updateLines () {
     lineDisplay.innerHTML = lines
   }
@@ -241,8 +240,6 @@ document.addEventListener('DOMContentLoaded',() => {
     for(let i=0; i<10; i++) {
       if(squares[i].classList.contains('locked')) {
         console.log('Game over man, game over!')
-        // TODO: How to exit a program?
-        exit()
         clearInterval(timerId)
       }
     }
